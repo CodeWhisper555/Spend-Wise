@@ -16,9 +16,7 @@ function Landing() {
       <header className="border-b border-slate-200 dark:border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
           <Link to="/" className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d4af37] text-black">
-              <Wallet size={21} />
-            </div>
+            <img src="/favicon.svg" alt="SpendWise" className="h-9 w-9 rounded-xl object-contain shadow-sm" />
 
             <span className="text-xl font-bold tracking-tight">
               Spend<span className="text-[#d4af37]">Wise</span>
