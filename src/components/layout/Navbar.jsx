@@ -4,16 +4,13 @@ function Navbar({ theme = "dark", onToggleTheme }) {
   const isDark = theme === "dark";
 
   return (
-    <header className="flex h-16 items-center justify-between border-b border-white/10 bg-[#0d0d0d]/95 px-4 sm:px-6">
+    <header className="flex h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-4 transition-colors duration-300 dark:border-white/10 dark:bg-[#0d0d0d]/95 sm:px-6">
       <div className="flex items-center gap-3">
         <div className="flex h-9 w-9 items-center justify-center rounded-xl border border-[#d9a928]/40 bg-[#d9a928]/10">
-          <span className="font-display text-lg font-bold text-[#d9a928]">
-            S
-          </span>
+          <span className="font-display text-lg font-bold text-[#d9a928]">S</span>
         </div>
-
         <div>
-          <p className="font-display text-lg font-bold tracking-tight text-white">
+          <p className="font-display text-lg font-bold tracking-tight text-slate-900 dark:text-white">
             Spend<span className="text-[#d9a928]">Wise</span>
           </p>
           <p className="hidden text-[10px] uppercase tracking-[0.2em] text-white/40 sm:block">
