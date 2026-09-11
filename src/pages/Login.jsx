@@ -1,4 +1,4 @@
-import { ArrowLeft, LockKeyhole, Wallet } from "lucide-react";
+import { ArrowLeft, LockKeyhole } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -31,9 +31,7 @@ function Login() {
     <main className="flex min-h-screen bg-white text-slate-900 dark:bg-[#090909] dark:text-white transition-colors duration-300">
       <div className="hidden flex-1 flex-col justify-between border-r border-slate-200 p-10 lg:flex dark:border-white/10">
         <Link to="/" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d4af37] text-black">
-            <Wallet size={21} />
-          </div>
+          <img src="/favicon.svg" alt="SpendWise" className="h-9 w-9 rounded-xl object-contain shadow-sm" />
 
           <span className="text-xl font-bold">
             Spend<span className="text-[#d4af37]">Wise</span>
@@ -76,9 +74,7 @@ function Login() {
 
           <div className="mb-8 lg:hidden">
             <Link to="/" className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d4af37] text-black">
-                <Wallet size={21} />
-              </div>
+              <img src="/favicon.svg" alt="SpendWise" className="h-9 w-9 rounded-xl object-contain shadow-sm" />
 
               <span className="text-xl font-bold">
                 Spend<span className="text-[#d4af37]">Wise</span>
