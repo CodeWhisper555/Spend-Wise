@@ -16,11 +16,11 @@ function App() {
     <ThemeProvider>
       <ExpenseProvider>
         <Routes>
-          {/* Public pages */}
+          {/* Public Routes */}
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
 
-          {/* Protected-style application layout */}
+          {/* Protected Workspace Layout (Guarded by AppLayout) */}
           <Route element={<AppLayout />}>
             <Route path="/app" element={<Dashboard />} />
             <Route path="/dashboard" element={<Dashboard />} />
