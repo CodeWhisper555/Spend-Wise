@@ -1,4 +1,4 @@
-import { Bell, Moon, ShieldCheck, UserRound } from "lucide-react";
+import { Bell, Moon, ShieldCheck, UserRound, WalletCards } from "lucide-react";
 import { useEffect, useState } from "react";
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
@@ -28,6 +28,10 @@ function Settings() {
   const [profile, setProfile] = useState({ name: "", email: "", phone: "" });
   const [preferences, setPreferences] = useState({ notifications: true, weeklySummary: true });
   const [errors, setErrors] = useState({ name: "", email: "", phone: "" });
+  
+  const [monthlyBudget, setMonthlyBudget] = useState(() => {
+    return localStorage.getItem("spendwise-budget") || "50000";
+  });
 
   useEffect(() => {
     const savedUser = localStorage.getItem("spendwiseUser");
@@ -92,6 +96,17 @@ function Settings() {
     localStorage.setItem("spendwiseUser", JSON.stringify(updatedUser));
     setProfile({ name, email, phone });
     alert("Profile updated successfully.");
+  };
+
+  const saveBudget = () => {
+    const budgetNum = Number(monthlyBudget);
+    if (!Number.isFinite(budgetNum) || budgetNum <= 0) {
+      alert("Please enter a valid budget amount.");
+      return;
+    }
+    localStorage.setItem("spendwise-budget", budgetNum.toString());
+    window.dispatchEvent(new Event("spendwise-budget-updated"));
+    alert("Monthly budget updated successfully.");
   };
 
   const togglePreference = (field) => {
@@ -171,6 +186,35 @@ function Settings() {
       <Card>
         <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/[0.07] pb-5">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
+            <WalletCards size={19} strokeWidth={1.8} />
+          </div>
+          <div>
+            <h2 className="text-base font-semibold text-slate-800 dark:text-white/85">
+              Monthly budget limit
+            </h2>
+            <p className="mt-1 text-xs text-slate-500 dark:text-white/35">
+              Customize your target maximum monthly expenditure.
+            </p>
+          </div>
+        </div>
+        <div className="mt-6 max-w-sm">
+          <Input
+            label="Monthly budget amount (₹)"
+            inputType="number"
+            value={monthlyBudget}
+            onChange={(value) => setMonthlyBudget(value)}
+            placeholder="e.g. 50000"
+            min="1"
+          />
+        </div>
+        <div className="mt-6 flex justify-end">
+          <Button onClick={saveBudget}>Save budget</Button>
+        </div>
+      </Card>
+
+      <Card>
+        <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/[0.07] pb-5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
             <Bell size={19} strokeWidth={1.8} />
           </div>
           <div>
@@ -190,7 +234,7 @@ function Settings() {
             onChange={() => togglePreference("notifications")}
           />
           <PreferenceRow
-            title="Weekly spending summary"
+            title="Weekly summary"
             description="Get a summary of your spending activity each week."
             checked={preferences.weeklySummary}
             onChange={() => togglePreference("weeklySummary")}
@@ -220,26 +264,6 @@ function Settings() {
             onChange={toggleTheme}
           />
         </div>
-      </Card>
-
-      <Card>
-        <div className="flex items-center gap-3 border-b border-slate-200 dark:border-white/[0.07] pb-5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
-            <ShieldCheck size={19} strokeWidth={1.8} />
-          </div>
-          <div>
-            <h2 className="text-base font-semibold text-slate-800 dark:text-white/85">
-              Privacy and security
-            </h2>
-            <p className="mt-1 text-xs text-slate-500 dark:text-white/35">
-              Your financial information stays private.
-            </p>
-          </div>
-        </div>
-        <p className="mt-5 text-sm leading-6 text-slate-600 dark:text-white/45">
-          SpendWise stores your local preferences securely in your browser.
-          No financial information is shared with third parties.
-        </p>
       </Card>
     </div>
   );
