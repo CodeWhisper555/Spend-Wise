@@ -1,15 +1,32 @@
-import { ArrowLeft, LockKeyhole } from "lucide-react";
+import { ArrowLeft, KeyRound } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+function validatePassword(password) {
+  if (!password) return "Password is required.";
+  if (password.length < 8) return "Password must be at least 8 characters long.";
+  if (!/[A-Z]/.test(password)) return "Password must contain at least one uppercase letter.";
+  if (!/[a-z]/.test(password)) return "Password must contain at least one lowercase letter.";
+  if (!/\d/.test(password)) return "Password must contain at least one number.";
+  if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return "Password must contain at least one special character.";
+  return "";
+}
 
 function Login() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
+
+    const error = validatePassword(password);
+    if (error) {
+      setPasswordError(error);
+      return;
+    }
 
     const existingUser = JSON.parse(
       localStorage.getItem("spendwiseUser") || "null"
@@ -32,8 +49,7 @@ function Login() {
       <div className="hidden flex-1 flex-col justify-between border-r border-slate-200 p-10 lg:flex dark:border-white/10">
         <Link to="/" className="flex items-center gap-3">
           <img src="/favicon.svg" alt="SpendWise" className="h-9 w-9 rounded-xl object-contain shadow-sm" />
-
-          <span className="text-xl font-bold">
+          <span className="text-xl font-bold tracking-tight">
             Spend<span className="text-[#d4af37]">Wise</span>
           </span>
         </Link>
@@ -75,8 +91,7 @@ function Login() {
           <div className="mb-8 lg:hidden">
             <Link to="/" className="flex items-center gap-3">
               <img src="/favicon.svg" alt="SpendWise" className="h-9 w-9 rounded-xl object-contain shadow-sm" />
-
-              <span className="text-xl font-bold">
+              <span className="text-xl font-bold tracking-tight">
                 Spend<span className="text-[#d4af37]">Wise</span>
               </span>
             </Link>
@@ -84,7 +99,7 @@ function Login() {
 
           <div>
             <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#d4af37]/10 text-[#d4af37]">
-              <LockKeyhole size={23} />
+              <KeyRound size={23} />
             </div>
 
             <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Welcome back</h2>
@@ -136,10 +151,19 @@ function Login() {
                 type="password"
                 required
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  if (passwordError) setPasswordError("");
+                }}
                 placeholder="Enter your password"
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-slate-900 outline-none placeholder:text-slate-400 transition focus:border-[#d4af37] dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/25"
               />
+              {passwordError && (
+                <p className="mt-1 text-xs text-red-500 dark:text-red-400">{passwordError}</p>
+              )}
+              <p className="mt-1.5 text-[11px] text-slate-400 dark:text-white/35">
+                Minimum 8 characters with uppercase, lowercase, number, and special character.
+              </p>
             </div>
 
             <button
@@ -165,11 +189,6 @@ function Login() {
             >
               Create one
             </button>
-          </p>
-
-          <p className="mt-8 text-center text-xs leading-5 text-slate-400 dark:text-white/30">
-            Demo mode is enabled. Any valid-looking email and password will
-            open the dashboard.
           </p>
         </div>
       </div>
