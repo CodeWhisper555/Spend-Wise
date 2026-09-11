@@ -25,10 +25,7 @@ const navigationItems = [
 
 function MobileNavigation() {
   return (
-    <nav
-      aria-label="Mobile navigation"
-      className="fixed bottom-0 left-0 right-0 z-40 border-t border-white/10 bg-[#0d0d0d]/95 px-3 py-2 backdrop-blur-lg lg:hidden"
-    >
+    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-slate-200 bg-white/95 px-3 py-2 backdrop-blur-lg transition-colors duration-300 dark:border-white/10 dark:bg-[#0d0d0d]/95 lg:hidden">
       <div className="mx-auto flex max-w-md items-center justify-around">
         {navigationItems.map((item) => {
           const Icon = item.icon;
