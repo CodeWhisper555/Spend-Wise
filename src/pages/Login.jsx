@@ -2,6 +2,14 @@ import { ArrowLeft, KeyRound } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+function validateEmail(email) {
+  if (!email) return "Email address is required.";
+  if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email.trim())) {
+    return "Please enter a valid Gmail address (ending with @gmail.com).";
+  }
+  return "";
+}
+
 function validatePassword(password) {
   if (!password) return "Password is required.";
   if (password.length < 8) return "Password must be at least 8 characters long.";
@@ -17,14 +25,19 @@ function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
   function handleSubmit(event) {
     event.preventDefault();
 
-    const error = validatePassword(password);
-    if (error) {
-      setPasswordError(error);
+    const emailErr = validateEmail(email);
+    const passErr = validatePassword(password);
+
+    setEmailError(emailErr);
+    setPasswordError(passErr);
+
+    if (emailErr || passErr) {
       return;
     }
 
@@ -34,7 +47,7 @@ function Login() {
 
     const userData = {
       name: existingUser?.name || email.split("@")[0],
-      email: email,
+      email: email.trim(),
       phone: existingUser?.phone || "",
       avatar: existingUser?.avatar || "",
     };
@@ -123,10 +136,19 @@ function Login() {
                 type="email"
                 required
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
-                placeholder="you@example.com"
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  if (emailError) setEmailError("");
+                }}
+                placeholder="you@gmail.com"
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-slate-900 outline-none placeholder:text-slate-400 transition focus:border-[#d4af37] dark:border-white/10 dark:bg-white/[0.04] dark:text-white dark:placeholder:text-white/25"
               />
+              {emailError && (
+                <p className="mt-1 text-xs text-red-500 dark:text-red-400">{emailError}</p>
+              )}
+              <p className="mt-1.5 text-[11px] text-slate-400 dark:text-white/35">
+                Please use a valid Gmail address (ending with @gmail.com).
+              </p>
             </div>
 
             <div>
