@@ -4,6 +4,50 @@ import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 
+function validatePhoneNumber(phone) {
+  if (!phone) {
+    return "Phone number is required.";
+  }
+
+  if (!/^\d+$/.test(phone)) {
+    return "Phone number must contain digits only.";
+  }
+
+  if (phone.length !== 10) {
+    return "Phone number must contain exactly 10 digits.";
+  }
+
+  if (!/^[6-9]\d{9}$/.test(phone)) {
+    return "Enter a valid Indian mobile number starting with 6, 7, 8, or 9.";
+  }
+
+  if (/^(\d)\1{9}$/.test(phone)) {
+    return "Please enter a valid phone number.";
+  }
+
+  if (
+    phone === "0123456789" ||
+    phone === "1234567890" ||
+    phone === "0987654321"
+  ) {
+    return "Please enter a valid phone number.";
+  }
+
+  return "";
+}
+
+function validateEmail(email) {
+  if (!email) {
+    return "Email address is required.";
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+    return "Enter a valid email address.";
+  }
+
+  return "";
+}
+
 function Settings() {
   const [profile, setProfile] = useState({
     name: "",
@@ -15,6 +59,12 @@ function Settings() {
     darkMode: true,
     notifications: true,
     weeklySummary: true,
+  });
+
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    phone: "",
   });
 
   // Load saved user information when Settings opens
@@ -41,21 +91,91 @@ function Settings() {
       ...current,
       [field]: value,
     }));
+
+    if (field === "name") {
+      setErrors((current) => ({
+        ...current,
+        name: value.trim() ? "" : "Name is required.",
+      }));
+    }
+
+    if (field === "email") {
+      setErrors((current) => ({
+        ...current,
+        email: validateEmail(value.trim()),
+      }));
+    }
+
+    if (field === "phone") {
+      // Allow only digits while typing
+      if (!/^\d*$/.test(value)) {
+        setErrors((current) => ({
+          ...current,
+          phone: "Phone number must contain digits only.",
+        }));
+
+        return;
+      }
+
+      // Limit phone number to 10 digits
+      const phoneValue = value.slice(0, 10);
+
+      setProfile((current) => ({
+        ...current,
+        phone: phoneValue,
+      }));
+
+      setErrors((current) => ({
+        ...current,
+        phone: phoneValue ? validatePhoneNumber(phoneValue) : "",
+      }));
+    }
   };
 
   const saveProfile = () => {
-    const existingUser = JSON.parse(
-      localStorage.getItem("spendwiseUser") || "null"
-    );
+    const name = profile.name.trim();
+    const email = profile.email.trim().toLowerCase();
+    const phone = profile.phone.trim();
+
+    const nameError = name ? "" : "Name is required.";
+    const emailError = validateEmail(email);
+    const phoneError = validatePhoneNumber(phone);
+
+    setErrors({
+      name: nameError,
+      email: emailError,
+      phone: phoneError,
+    });
+
+    if (nameError || emailError || phoneError) {
+      alert("Please correct the errors before saving.");
+      return;
+    }
+
+    let existingUser = {};
+
+    try {
+      existingUser = JSON.parse(
+        localStorage.getItem("spendwiseUser") || "{}"
+      );
+    } catch (error) {
+      console.error("Unable to read saved user information:", error);
+    }
 
     const updatedUser = {
       ...existingUser,
-      name: profile.name,
-      email: profile.email,
-      phone: profile.phone,
+      name,
+      email,
+      phone,
     };
 
     localStorage.setItem("spendwiseUser", JSON.stringify(updatedUser));
+
+    setProfile({
+      name,
+      email,
+      phone,
+    });
 
     alert("Profile updated successfully.");
   };
@@ -101,28 +221,52 @@ function Settings() {
         </div>
 
         <div className="mt-6 grid gap-5 sm:grid-cols-2">
-          <Input
-            label="Name"
-            value={profile.name}
-            onChange={(value) => updateProfile("name", value)}
-            placeholder="Enter your name"
-          />
+          <div>
+            <Input
+              label="Name"
+              value={profile.name}
+              onChange={(value) => updateProfile("name", value)}
+              placeholder="Enter your name"
+            />
 
-          <Input
-            label="Email address"
-            inputType="email"
-            value={profile.email}
-            onChange={(value) => updateProfile("email", value)}
-            placeholder="Enter your email"
-          />
+            {errors.name && (
+              <p className="mt-1 text-xs text-red-400">{errors.name}</p>
+            )}
+          </div>
 
-          <Input
-            label="Phone number"
-            inputType="tel"
-            value={profile.phone}
-            onChange={(value) => updateProfile("phone", value)}
-            placeholder="Enter your phone number"
-          />
+          <div>
+            <Input
+              label="Email address"
+              inputType="email"
+              value={profile.email}
+              onChange={(value) => updateProfile("email", value)}
+              placeholder="Enter your email"
+            />
+
+            {errors.email && (
+              <p className="mt-1 text-xs text-red-400">{errors.email}</p>
+            )}
+          </div>
+
+          <div>
+            <Input
+              label="Phone number"
+              inputType="tel"
+              value={profile.phone}
+              onChange={(value) => updateProfile("phone", value)}
+              placeholder="Enter your phone number"
+              maxLength={10}
+              inputMode="numeric"
+            />
+
+            {errors.phone && (
+              <p className="mt-1 text-xs text-red-400">{errors.phone}</p>
+            )}
+
+            <p className="mt-1 text-xs text-white/35">
+              Enter a valid 10-digit Indian mobile number.
+            </p>
+          </div>
         </div>
 
         <div className="mt-6 flex justify-end">
