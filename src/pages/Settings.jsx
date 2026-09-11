@@ -1,14 +1,14 @@
 import { Bell, Moon, ShieldCheck, UserRound } from "lucide-react";
-import { useState } from "react";
-import AppShell from "../components/layout/AppShell";
+import { useEffect, useState } from "react";
 import Button from "../components/ui/Button";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
 
 function Settings() {
   const [profile, setProfile] = useState({
-    name: "SpendWise User",
-    email: "user@example.com",
+    name: "",
+    email: "",
+    phone: "",
   });
 
   const [preferences, setPreferences] = useState({
@@ -17,11 +17,47 @@ function Settings() {
     weeklySummary: true,
   });
 
+  // Load saved user information when Settings opens
+  useEffect(() => {
+    const savedUser = localStorage.getItem("spendwiseUser");
+
+    if (savedUser) {
+      try {
+        const parsedUser = JSON.parse(savedUser);
+
+        setProfile({
+          name: parsedUser.name || "",
+          email: parsedUser.email || "",
+          phone: parsedUser.phone || "",
+        });
+      } catch (error) {
+        console.error("Unable to load profile information:", error);
+      }
+    }
+  }, []);
+
   const updateProfile = (field, value) => {
     setProfile((current) => ({
       ...current,
       [field]: value,
     }));
+  };
+
+  const saveProfile = () => {
+    const existingUser = JSON.parse(
+      localStorage.getItem("spendwiseUser") || "null"
+    );
+
+    const updatedUser = {
+      ...existingUser,
+      name: profile.name,
+      email: profile.email,
+      phone: profile.phone,
+    };
+
+    localStorage.setItem("spendwiseUser", JSON.stringify(updatedUser));
+
+    alert("Profile updated successfully.");
   };
 
   const togglePreference = (field) => {
@@ -32,142 +68,152 @@ function Settings() {
   };
 
   return (
-    
-      <div className="mx-auto max-w-4xl space-y-8">
-        <div>
-          <p className="text-xs font-medium uppercase tracking-[0.14em] text-white/35">
-            Preferences
-          </p>
+    <div className="mx-auto max-w-4xl space-y-8">
+      <div>
+        <p className="text-xs font-medium uppercase tracking-[0.14em] text-white/35">
+          Preferences
+        </p>
 
-          <h1 className="mt-3 font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
-            Settings
-          </h1>
+        <h1 className="mt-3 font-display text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+          Settings
+        </h1>
 
-          <p className="mt-2 text-sm text-white/45">
-            Manage your profile and application preferences.
-          </p>
+        <p className="mt-2 text-sm text-white/45">
+          Manage your profile and application preferences.
+        </p>
+      </div>
+
+      <Card>
+        <div className="flex items-center gap-3 border-b border-white/[0.07] pb-5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
+            <UserRound size={19} strokeWidth={1.8} />
+          </div>
+
+          <div>
+            <h2 className="text-base font-semibold text-white/85">
+              Profile information
+            </h2>
+
+            <p className="mt-1 text-xs text-white/35">
+              Update your personal account details.
+            </p>
+          </div>
         </div>
 
-        <Card>
-          <div className="flex items-center gap-3 border-b border-white/[0.07] pb-5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
-              <UserRound size={19} strokeWidth={1.8} />
-            </div>
+        <div className="mt-6 grid gap-5 sm:grid-cols-2">
+          <Input
+            label="Name"
+            value={profile.name}
+            onChange={(value) => updateProfile("name", value)}
+            placeholder="Enter your name"
+          />
 
-            <div>
-              <h2 className="text-base font-semibold text-white/85">
-                Profile information
-              </h2>
-              <p className="mt-1 text-xs text-white/35">
-                Update your personal account details.
-              </p>
-            </div>
+          <Input
+            label="Email address"
+            inputType="email"
+            value={profile.email}
+            onChange={(value) => updateProfile("email", value)}
+            placeholder="Enter your email"
+          />
+
+          <Input
+            label="Phone number"
+            inputType="tel"
+            value={profile.phone}
+            onChange={(value) => updateProfile("phone", value)}
+            placeholder="Enter your phone number"
+          />
+        </div>
+
+        <div className="mt-6 flex justify-end">
+          <Button onClick={saveProfile}>Save changes</Button>
+        </div>
+      </Card>
+
+      <Card>
+        <div className="flex items-center gap-3 border-b border-white/[0.07] pb-5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
+            <Bell size={19} strokeWidth={1.8} />
           </div>
 
-          <div className="mt-6 grid gap-5 sm:grid-cols-2">
-            <Input
-              label="Name"
-              value={profile.name}
-              onChange={(value) => updateProfile("name", value)}
-              placeholder="Enter your name"
-            />
+          <div>
+            <h2 className="text-base font-semibold text-white/85">
+              Notifications
+            </h2>
 
-            <Input
-              label="Email address"
-              inputType="email"
-              value={profile.email}
-              onChange={(value) => updateProfile("email", value)}
-              placeholder="Enter your email"
-            />
+            <p className="mt-1 text-xs text-white/35">
+              Choose which updates you want to receive.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-2 divide-y divide-white/[0.07]">
+          <PreferenceRow
+            title="Expense reminders"
+            description="Receive reminders to record your daily expenses."
+            checked={preferences.notifications}
+            onChange={() => togglePreference("notifications")}
+          />
+
+          <PreferenceRow
+            title="Weekly spending summary"
+            description="Get a summary of your spending activity each week."
+            checked={preferences.weeklySummary}
+            onChange={() => togglePreference("weeklySummary")}
+          />
+        </div>
+      </Card>
+
+      <Card>
+        <div className="flex items-center gap-3 border-b border-white/[0.07] pb-5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
+            <Moon size={19} strokeWidth={1.8} />
           </div>
 
-          <div className="mt-6 flex justify-end">
-            <Button>Save changes</Button>
+          <div>
+            <h2 className="text-base font-semibold text-white/85">
+              Appearance
+            </h2>
+
+            <p className="mt-1 text-xs text-white/35">
+              Customize how SpendWise looks on your device.
+            </p>
           </div>
-        </Card>
+        </div>
 
-        <Card>
-          <div className="flex items-center gap-3 border-b border-white/[0.07] pb-5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
-              <Bell size={19} strokeWidth={1.8} />
-            </div>
+        <div className="mt-2">
+          <PreferenceRow
+            title="Dark mode"
+            description="Use the dark interface for a comfortable viewing experience."
+            checked={preferences.darkMode}
+            onChange={() => togglePreference("darkMode")}
+          />
+        </div>
+      </Card>
 
-            <div>
-              <h2 className="text-base font-semibold text-white/85">
-                Notifications
-              </h2>
-              <p className="mt-1 text-xs text-white/35">
-                Choose which updates you want to receive.
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-2 divide-y divide-white/[0.07]">
-            <PreferenceRow
-              title="Expense reminders"
-              description="Receive reminders to record your daily expenses."
-              checked={preferences.notifications}
-              onChange={() => togglePreference("notifications")}
-            />
-
-            <PreferenceRow
-              title="Weekly spending summary"
-              description="Get a summary of your spending activity each week."
-              checked={preferences.weeklySummary}
-              onChange={() => togglePreference("weeklySummary")}
-            />
-          </div>
-        </Card>
-
-        <Card>
-          <div className="flex items-center gap-3 border-b border-white/[0.07] pb-5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
-              <Moon size={19} strokeWidth={1.8} />
-            </div>
-
-            <div>
-              <h2 className="text-base font-semibold text-white/85">
-                Appearance
-              </h2>
-              <p className="mt-1 text-xs text-white/35">
-                Customize how SpendWise looks on your device.
-              </p>
-            </div>
+      <Card>
+        <div className="flex items-center gap-3 border-b border-white/[0.07] pb-5">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
+            <ShieldCheck size={19} strokeWidth={1.8} />
           </div>
 
-          <div className="mt-2">
-            <PreferenceRow
-              title="Dark mode"
-              description="Use the dark interface for a comfortable viewing experience."
-              checked={preferences.darkMode}
-              onChange={() => togglePreference("darkMode")}
-            />
+          <div>
+            <h2 className="text-base font-semibold text-white/85">
+              Privacy and security
+            </h2>
+
+            <p className="mt-1 text-xs text-white/35">
+              Your financial information stays private.
+            </p>
           </div>
-        </Card>
+        </div>
 
-        <Card>
-          <div className="flex items-center gap-3 border-b border-white/[0.07] pb-5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928]/10 text-[#d9a928]">
-              <ShieldCheck size={19} strokeWidth={1.8} />
-            </div>
-
-            <div>
-              <h2 className="text-base font-semibold text-white/85">
-                Privacy and security
-              </h2>
-              <p className="mt-1 text-xs text-white/35">
-                Your financial information stays private.
-              </p>
-            </div>
-          </div>
-
-          <p className="mt-5 text-sm leading-6 text-white/45">
-            SpendWise stores your local preferences securely in your browser.
-            No financial information is shared with third parties.
-          </p>
-        </Card>
-      </div>
-    
+        <p className="mt-5 text-sm leading-6 text-white/45">
+          SpendWise stores your local preferences securely in your browser.
+          No financial information is shared with third parties.
+        </p>
+      </Card>
+    </div>
   );
 }
 
@@ -176,6 +222,7 @@ function PreferenceRow({ title, description, checked, onChange }) {
     <div className="flex items-center justify-between gap-5 py-5">
       <div>
         <p className="text-sm font-medium text-white/80">{title}</p>
+
         <p className="mt-1 max-w-xl text-xs leading-5 text-white/35">
           {description}
         </p>
