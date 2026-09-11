@@ -1,11 +1,13 @@
-import { ArrowUpRight, WalletCards } from "lucide-react";
+import { AlertCircle, CheckCircle2, WalletCards } from "lucide-react";
 import Card from "../ui/Card";
 
 function BudgetProgress({ budget = 50000, spent = 32500 }) {
   const remaining = Math.max(budget - spent, 0);
-  const percentage =
-    budget > 0 ? Math.min((spent / budget) * 100, 100) : 0;
+  const rawPercentage = budget > 0 ? (spent / budget) * 100 : 0;
+  const displayPercentage = Math.round(rawPercentage);
+  const cappedPercentage = Math.min(rawPercentage, 100);
   const isOverBudget = spent > budget;
+  const isFullBudget = displayPercentage >= 100;
 
   const formatAmount = (amount) =>
     Number(amount || 0).toLocaleString("en-IN");
@@ -32,8 +34,14 @@ function BudgetProgress({ budget = 50000, spent = 32500 }) {
           </p>
         </div>
 
-        <span className="shrink-0 rounded-full bg-black/[0.05] px-2.5 py-1 text-[11px] font-medium text-black/55 dark:bg-white/[0.05] dark:text-white/50">
-          {Math.round(percentage)}%
+        <span
+          className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+            isOverBudget
+              ? "bg-red-500/10 text-red-600 dark:text-red-400"
+              : "bg-black/[0.05] text-black/55 dark:bg-white/[0.05] dark:text-white/50"
+          }`}
+        >
+          {displayPercentage}% spent
         </span>
       </div>
 
@@ -45,7 +53,7 @@ function BudgetProgress({ budget = 50000, spent = 32500 }) {
             </p>
 
             <p className="mt-1 text-xs text-black/45 dark:text-white/35">
-              of ₹{formatAmount(budget)} spent
+              of ₹{formatAmount(budget)} limit
             </p>
           </div>
 
@@ -61,7 +69,7 @@ function BudgetProgress({ budget = 50000, spent = 32500 }) {
             </p>
 
             <p className="mt-1 text-xs text-black/45 dark:text-white/35">
-              {isOverBudget ? "over budget" : "remaining"}
+              {isOverBudget ? "exceeded limit" : "remaining"}
             </p>
           </div>
         </div>
@@ -72,33 +80,47 @@ function BudgetProgress({ budget = 50000, spent = 32500 }) {
           aria-label="Monthly budget usage"
           aria-valuemin="0"
           aria-valuemax="100"
-          aria-valuenow={Math.round(percentage)}
+          aria-valuenow={cappedPercentage}
         >
           <div
             className={`h-full rounded-full transition-all ${
               isOverBudget ? "bg-red-500" : "bg-[#d9a928]"
             }`}
-            style={{ width: `${percentage}%` }}
+            style={{ width: `${cappedPercentage}%` }}
           />
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-3 text-xs">
           <span className="min-w-0 text-black/45 dark:text-white/35">
             {isOverBudget
-              ? "Consider reducing your spending"
-              : "You're within your monthly limit"}
+              ? "You have exceeded your monthly budget."
+              : isFullBudget
+              ? "You have reached your exact budget limit."
+              : "You're within your monthly limit."}
           </span>
 
-          <ArrowUpRight
-            aria-hidden="true"
-            size={15}
-            className={`shrink-0 ${
-              isOverBudget
-                ? "text-red-600 dark:text-red-400"
-                : "text-[#b88912] dark:text-[#d9a928]"
-            }`}
-            strokeWidth={1.8}
-          />
+          {isOverBudget ? (
+            <AlertCircle
+              aria-hidden="true"
+              size={15}
+              className="shrink-0 text-red-600 dark:text-red-400"
+              strokeWidth={1.8}
+            />
+          ) : isFullBudget ? (
+            <CheckCircle2
+              aria-hidden="true"
+              size={15}
+              className="shrink-0 text-[#b88912] dark:text-[#d9a928]"
+              strokeWidth={1.8}
+            />
+          ) : (
+            <CheckCircle2
+              aria-hidden="true"
+              size={15}
+              className="shrink-0 text-emerald-600 dark:text-emerald-400"
+              strokeWidth={1.8}
+            />
+          )}
         </div>
       </div>
     </Card>
