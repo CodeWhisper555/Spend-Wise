@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, Navigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 import MobileNavigation from "./MobileNavigation";
@@ -6,6 +6,23 @@ import { useTheme } from "../../context/ThemeContext";
 
 function AppLayout() {
   const { theme, toggleTheme } = useTheme();
+
+  // Strict Authentication & Gmail Guard
+  try {
+    const storedUser = localStorage.getItem("spendwiseUser");
+    if (!storedUser) {
+      return <Navigate to="/login" replace />;
+    }
+
+    const user = JSON.parse(storedUser);
+    if (!user || !user.email || !user.email.toLowerCase().endsWith("@gmail.com")) {
+      localStorage.removeItem("spendwiseUser");
+      return <Navigate to="/login" replace />;
+    }
+  } catch (error) {
+    localStorage.removeItem("spendwiseUser");
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <div className="flex min-h-screen bg-white text-[#171717] dark:bg-[#090909] dark:text-white transition-colors duration-300">
