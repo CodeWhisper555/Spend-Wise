@@ -1,4 +1,5 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { getStoredValue, setStoredValue } from "../utils/storage";
 
 const ExpenseContext = createContext(null);
 
@@ -42,7 +43,13 @@ const initialExpenses = [
 ];
 
 export function ExpenseProvider({ children }) {
-  const [expenses, setExpenses] = useState(initialExpenses);
+  const [expenses, setExpenses] = useState(() => {
+    return getStoredValue("expenses", initialExpenses);
+  });
+
+  useEffect(() => {
+    setStoredValue("expenses", expenses);
+  }, [expenses]);
 
   const addExpense = (expense) => {
     setExpenses((currentExpenses) => [
