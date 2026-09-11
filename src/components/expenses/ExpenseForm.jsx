@@ -31,14 +31,11 @@ const isStrictDate = (value) => {
     return false;
   }
 
-  // Only YYYY-MM-DD is accepted
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
     return false;
   }
 
   const [year, month, day] = value.split("-").map(Number);
-
-  // Check whether the date actually exists
   const date = new Date(year, month - 1, day);
 
   return (
@@ -53,20 +50,16 @@ const normalizeExistingDate = (value) => {
     return getTodayDate();
   }
 
-  // Preserve only an already-valid strict date
   if (isStrictDate(value)) {
     return value;
   }
 
-  // Convert common existing formats only when editing old data
   const match = String(value).match(
     /^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/
   );
 
   if (match) {
     const [, first, second, year] = match;
-
-    // Assumes old localized values are DD/MM/YYYY
     const converted = `${year}-${String(second).padStart(
       2,
       "0"
@@ -136,6 +129,34 @@ function ExpenseForm({ expense, onSubmit, onCancel, loading = false }) {
       nextErrors.amount = "Amount must be greater than zero.";
     } else if (amount > 100000000) {
       nextErrors.amount = "Amount is too large.";
+    } else {
+      try {
+        const savedExpenses = JSON.parse(localStorage.getItem("spendwise-expenses") || "[]");
+        const budget = Number(localStorage.getItem("spendwise-budget") || 50000);
+
+        const expenseDateObj = form.date && isStrictDate(form.date) ? new Date(`${form.date}T00:00:00`) : new Date();
+        const targetMonth = expenseDateObj.getMonth();
+        const targetYear = expenseDateObj.getFullYear();
+
+        const currentMonthExpenses = savedExpenses.filter((item) => {
+          if (!item.date) return false;
+          const d = new Date(`${item.date}T00:00:00`);
+          return d.getMonth() === targetMonth && d.getFullYear() === targetYear;
+        });
+
+        const otherExpensesSpent = currentMonthExpenses.reduce((sum, item) => {
+          if (expense && item.id === expense.id) return sum;
+          return sum + Number(item.amount || 0);
+        }, 0);
+
+        const remainingBalance = Math.max(budget - otherExpensesSpent, 0);
+
+        if (amount > remainingBalance) {
+          nextErrors.amount = `Amount cannot exceed your remaining budget (₹${remainingBalance.toLocaleString("en-IN")}).`;
+        }
+      } catch (e) {
+        console.error("Budget validation error:", e);
+      }
     }
 
     if (!form.category) {
