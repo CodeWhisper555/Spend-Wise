@@ -26,7 +26,7 @@ const navigationItems = [
 
 function Sidebar() {
   return (
-    <aside className="hidden min-h-[calc(100vh-4rem)] w-64 shrink-0 flex-col border-r border-black/[0.08] bg-[#f8f8f6] px-4 py-6 lg:flex dark:border-white/10 dark:bg-[#0d0d0d]">
+    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col overflow-y-auto border-r border-black/[0.08] bg-[#f8f8f6] px-4 py-6 lg:flex dark:border-white/10 dark:bg-[#0d0d0d]">
       <div className="mb-8 rounded-2xl border border-[#d9a928]/25 bg-[#d9a928]/[0.06] p-4 dark:border-[#d9a928]/20 dark:bg-[#d9a928]/5">
         <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-[#d9a928] text-[#090909]">
           <WalletCards size={21} strokeWidth={2.2} />
