@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" role="img" aria-labelledby="emptyTitle emptyDesc">
+  <title id="emptyTitle">No expenses yet</title>
+  <desc id="emptyDesc">
+    An illustration of an empty wallet and a small golden sparkle
+  </desc>
+
+  <rect x="52" y="48" width="216" height="144" rx="24" fill="#151515" stroke="#333333" stroke-width="2"></rect>
+
+  <path d="M76 82h168v82H76c-13.255 0-24-10.745-24-24v-34c0-13.255 10.745-24 24-24Z" fill="#202020" stroke="#444444" stroke-width="2"></path>
+
+  <path d="M76 82h168v28H76c-13.255 0-24-10.745-24-24v-4h24Z" fill="#292929"></path>
+
+  <path d="M216 112h32v48h-32c-13.255 0-24-10.745-24-24s10.745-24 24-24Z" fill="#D9A928"></path>
+
+  <circle cx="216" cy="136" r="6" fill="#090909"></circle>
+
+  <path d="M112 62c0-10 8-18 18-18h60c10 0 18 8 18 18v20h-96V62Z" fill="#181818" stroke="#D9A928" stroke-width="3"></path>
+
+  <path d="M130 44v-8c0-6.627 5.373-12 12-12h36c6.627 0 12 5.373 12 12v8" fill="none" stroke="#D9A928" stroke-width="3" stroke-linecap="round"></path>
+
+  <path d="M160 94v36" stroke="#D9A928" stroke-width="3" stroke-linecap="round"></path>
+
+  <path d="M146 112h28M146 122h28" stroke="#D9A928" stroke-width="3" stroke-linecap="round"></path>
+
+  <path d="M266 32v20M256 42h20" stroke="#D9A928" stroke-width="4" stroke-linecap="round"></path>
+
+  <path d="M42 178v14M35 185h14" stroke="#D9A928" stroke-width="3" stroke-linecap="round"></path>
+
+  <circle cx="278" cy="184" r="4" fill="#D9A928"></circle>
+</svg>
