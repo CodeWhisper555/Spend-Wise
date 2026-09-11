@@ -11,9 +11,9 @@ import { Link } from "react-router-dom";
 
 function Landing() {
   return (
-    <main className="min-h-screen bg-[#090909] text-white">
+    <main className="min-h-screen bg-white text-slate-900 dark:bg-[#090909] dark:text-white transition-colors duration-300">
       {/* Navbar */}
-      <header className="border-b border-white/10">
+      <header className="border-b border-slate-200 dark:border-white/10">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
           <Link to="/" className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#d4af37] text-black">
@@ -28,7 +28,7 @@ function Landing() {
           <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="rounded-lg px-4 py-2 text-sm text-white/70 transition hover:bg-white/10 hover:text-white"
+              className="rounded-lg px-4 py-2 text-sm text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-white/70 dark:hover:bg-white/10 dark:hover:text-white"
             >
               Log in
             </Link>
@@ -49,17 +49,17 @@ function Landing() {
 
         <div className="relative mx-auto grid max-w-7xl items-center gap-16 px-6 py-24 lg:grid-cols-2 lg:px-8 lg:py-32">
           <div>
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 px-3 py-1.5 text-sm text-[#e2c45a]">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 px-3 py-1.5 text-sm text-[#a37810] dark:text-[#e2c45a]">
               <Sparkles size={15} />
               Your smarter money companion
             </div>
 
-            <h1 className="max-w-3xl text-5xl font-bold leading-tight tracking-tight sm:text-6xl">
+            <h1 className="max-w-3xl text-5xl font-bold leading-tight tracking-tight sm:text-6xl text-slate-900 dark:text-white">
               Take control of your money with{" "}
               <span className="text-[#d4af37]">SpendWise.</span>
             </h1>
 
-            <p className="mt-6 max-w-xl text-lg leading-8 text-white/60">
+            <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600 dark:text-white/60">
               Track expenses, understand your spending habits, and build better
               financial decisions with a simple and beautiful personal finance
               dashboard.
@@ -76,13 +76,13 @@ function Landing() {
 
               <a
                 href="#features"
-                className="rounded-xl border border-white/15 px-6 py-3.5 font-semibold text-white/80 transition hover:border-white/30 hover:bg-white/5 hover:text-white"
+                className="rounded-xl border border-slate-300 px-6 py-3.5 font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 hover:text-slate-900 dark:border-white/15 dark:text-white/80 dark:hover:border-white/30 dark:hover:bg-white/5 dark:hover:text-white"
               >
                 Explore features
               </a>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/50">
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-500 dark:text-white/50">
               <span className="flex items-center gap-2">
                 <Check size={16} className="text-[#d4af37]" />
                 Simple expense tracking
@@ -99,39 +99,39 @@ function Landing() {
           <div className="relative">
             <div className="absolute -inset-4 rounded-3xl bg-[#d4af37]/10 blur-2xl" />
 
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#111111] shadow-2xl">
-              <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50 shadow-2xl dark:border-white/10 dark:bg-[#111111]">
+              <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4 dark:border-white/10">
                 <div>
-                  <p className="text-xs text-white/40">Overview</p>
-                  <p className="mt-1 font-semibold">Financial dashboard</p>
+                  <p className="text-xs text-slate-400 dark:text-white/40">Overview</p>
+                  <p className="mt-1 font-semibold text-slate-900 dark:text-white">Financial dashboard</p>
                 </div>
 
                 <div className="h-2.5 w-2.5 rounded-full bg-[#d4af37]" />
               </div>
 
               <div className="grid gap-4 p-5 sm:grid-cols-2">
-                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-xs text-white/40">Total balance</p>
-                  <p className="mt-2 text-2xl font-bold">₹48,250</p>
-                  <p className="mt-2 text-xs text-emerald-400">
+                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
+                  <p className="text-xs text-slate-400 dark:text-white/40">Total balance</p>
+                  <p className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">₹48,250</p>
+                  <p className="mt-2 text-xs text-emerald-600 dark:text-emerald-400">
                     +12.8% this month
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                  <p className="text-xs text-white/40">Monthly expenses</p>
-                  <p className="mt-2 text-2xl font-bold">₹16,840</p>
-                  <p className="mt-2 text-xs text-white/40">
+                <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
+                  <p className="text-xs text-slate-400 dark:text-white/40">Monthly expenses</p>
+                  <p className="mt-2 text-2xl font-bold text-slate-900 dark:text-white">₹16,840</p>
+                  <p className="mt-2 text-xs text-slate-400 dark:text-white/40">
                     Within your budget
                   </p>
                 </div>
               </div>
 
-              <div className="mx-5 rounded-xl border border-white/10 bg-white/[0.03] p-5">
+              <div className="mx-5 rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-semibold">Spending overview</p>
-                    <p className="mt-1 text-xs text-white/40">
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Spending overview</p>
+                    <p className="mt-1 text-xs text-slate-400 dark:text-white/40">
                       Last 6 months
                     </p>
                   </div>
@@ -158,20 +158,20 @@ function Landing() {
                 </div>
               </div>
 
-              <div className="m-5 rounded-xl border border-white/10 bg-white/[0.03] p-4">
+              <div className="m-5 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
                 <div className="flex items-center gap-3">
                   <div className="rounded-lg bg-[#d4af37]/10 p-2 text-[#d4af37]">
                     <ReceiptText size={18} />
                   </div>
 
                   <div>
-                    <p className="text-sm font-medium">Recent expenses</p>
-                    <p className="text-xs text-white/40">
+                    <p className="text-sm font-medium text-slate-900 dark:text-white">Recent expenses</p>
+                    <p className="text-xs text-slate-400 dark:text-white/40">
                       Food, travel, shopping
                     </p>
                   </div>
 
-                  <span className="ml-auto text-sm font-semibold">₹2,450</span>
+                  <span className="ml-auto text-sm font-semibold text-slate-900 dark:text-white">₹2,450</span>
                 </div>
               </div>
             </div>
@@ -180,18 +180,18 @@ function Landing() {
       </section>
 
       {/* Features */}
-      <section id="features" className="border-t border-white/10 bg-[#0d0d0d]">
+      <section id="features" className="border-t border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-[#0d0d0d]">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
           <div className="max-w-2xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#d4af37]">
               Built for clarity
             </p>
 
-            <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
               Everything you need to manage your spending.
             </h2>
 
-            <p className="mt-4 text-white/55">
+            <p className="mt-4 text-slate-600 dark:text-white/55">
               SpendWise helps you turn everyday transactions into meaningful
               financial awareness.
             </p>
@@ -220,13 +220,13 @@ function Landing() {
       </section>
 
       {/* CTA */}
-      <section className="border-t border-white/10">
+      <section className="border-t border-slate-200 dark:border-white/10">
         <div className="mx-auto max-w-4xl px-6 py-24 text-center">
-          <h2 className="text-3xl font-bold sm:text-4xl">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white sm:text-4xl">
             Start building better money habits today.
           </h2>
 
-          <p className="mx-auto mt-4 max-w-xl text-white/55">
+          <p className="mx-auto mt-4 max-w-xl text-slate-600 dark:text-white/55">
             A clear financial future begins with understanding your present
             spending.
           </p>
@@ -242,8 +242,8 @@ function Landing() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/10 px-6 py-6">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 text-sm text-white/40 sm:flex-row">
+      <footer className="border-t border-slate-200 px-6 py-6 dark:border-white/10">
+        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-3 text-sm text-slate-500 dark:text-white/40 sm:flex-row">
           <p>
             © {new Date().getFullYear()} SpendWise. All rights reserved.
           </p>
@@ -257,14 +257,14 @@ function Landing() {
 
 function FeatureCard({ icon, title, description }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 transition hover:border-[#d4af37]/40">
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 transition hover:border-[#d4af37]/40 shadow-sm dark:border-white/10 dark:bg-white/[0.03]">
       <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#d4af37]/10 text-[#d4af37]">
         {icon}
       </div>
 
-      <h3 className="mt-6 text-lg font-semibold">{title}</h3>
+      <h3 className="mt-6 text-lg font-semibold text-slate-900 dark:text-white">{title}</h3>
 
-      <p className="mt-3 leading-7 text-white/50">{description}</p>
+      <p className="mt-3 leading-7 text-slate-600 dark:text-white/50">{description}</p>
     </div>
   );
 }
