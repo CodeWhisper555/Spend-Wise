@@ -67,6 +67,17 @@ function Dashboard() {
     };
   }, []);
 
+  const getDynamicGreeting = () => {
+    const currentHour = new Date().getHours();
+    if (currentHour >= 5 && currentHour < 12) {
+      return "Good morning";
+    } else if (currentHour >= 12 && currentHour < 17) {
+      return "Good afternoon";
+    } else {
+      return "Good evening";
+    }
+  };
+
   const currentMonthExpenses = useMemo(() => {
     const now = new Date();
     const currentMonth = now.getMonth();
@@ -103,8 +114,11 @@ function Dashboard() {
 
   const budgetUsedPercentage =
     monthlyBudget > 0
-      ? Math.min((totalSpent / monthlyBudget) * 100, 100)
+      ? (totalSpent / monthlyBudget) * 100
       : 0;
+
+  const cappedBudgetUsedPercentage = Math.min(budgetUsedPercentage, 100);
+  const isFullOrOverBudget = budgetUsedPercentage >= 100;
 
   const monthlySpendingData = useMemo(() => {
     const now = new Date();
@@ -172,11 +186,11 @@ function Dashboard() {
           </p>
 
           <h1 className="mt-2 font-display text-2xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
-            Good morning
+            {getDynamicGreeting()}
           </h1>
 
           <p className="mt-2 text-sm text-slate-600 dark:text-white/45">
-            Here's an overview of your spending activity.
+            Here&apos;s an overview of your spending activity.
           </p>
         </div>
 
@@ -219,9 +233,9 @@ function Dashboard() {
           description={`Monthly limit ${formatCurrency(
             monthlyBudget
           )}`}
-          trend={`${Math.round(100 - budgetUsedPercentage)}%`}
-          trendLabel="budget remaining"
-          trendDirection="down"
+          trend={isFullOrOverBudget ? null : `${Math.round(100 - cappedBudgetUsedPercentage)}%`}
+          trendLabel={isFullOrOverBudget ? "budget limit reached" : "budget remaining"}
+          trendDirection={budgetUsedPercentage === 0 ? "up" : "down"}
         />
       </div>
 
