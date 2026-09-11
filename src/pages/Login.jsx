@@ -11,8 +11,19 @@ function Login() {
   function handleSubmit(event) {
     event.preventDefault();
 
-    // Demo login for now.
-    // Replace this later with Firebase, Supabase, or your own backend.
+    const existingUser = JSON.parse(
+      localStorage.getItem("spendwiseUser") || "null"
+    );
+
+    const userData = {
+      name: existingUser?.name || email.split("@")[0],
+      email: email,
+      phone: existingUser?.phone || "",
+      avatar: existingUser?.avatar || "",
+    };
+
+    localStorage.setItem("spendwiseUser", JSON.stringify(userData));
+
     navigate("/app");
   }
 
